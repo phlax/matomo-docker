@@ -1,0 +1,15 @@
+version: "2.1"
+services:
+
+  matomo:
+    image: phlax/matomo
+    healthcheck:
+      interval: 10s
+      retries: 20
+      test: php-fpm-healthcheck
+
+  http:
+    image: nginx
+    depends_on:
+      matomo:
+        condition: service_healthy
