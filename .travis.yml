@@ -1,0 +1,21 @@
+# https://travis-ci.org/#!/phlax/matomo-docker
+
+install:
+  - make image
+
+script:
+  - cd example
+  - docker-compose up -d http
+  - docker-compose ps matomo | grep healthy | grep -v unhealthy
+  - cd ..
+
+before_deploy:
+  - echo $DOCKER_API_TOKEN | docker login -u phlax --password-stdin
+
+deploy:
+  provider: script
+  script: make docker-push
+  skip_cleanup: true
+  on:
+    all_branches: true
+    condition: $TRAVIS_BRANCH =~ ^(master)$
