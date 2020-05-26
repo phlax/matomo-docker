@@ -9,3 +9,6 @@ RUN set -xe && echo "pm.status_path = /status" >> /usr/local/etc/php-fpm.d/zz-do
 # Grab the healthcheck script
 RUN wget -O /usr/local/bin/php-fpm-healthcheck https://raw.githubusercontent.com/renatomefi/php-fpm-healthcheck/master/php-fpm-healthcheck \
       && chmod +x /usr/local/bin/php-fpm-healthcheck
+
+HEALTHCHECK --interval=10s --timeout=1s --retries=5 \
+	CMD php-fpm-healthcheck
